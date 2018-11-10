@@ -27,8 +27,6 @@ You must have a `tsconfig.json` in the same directory as your `rollup.config.js`
 
 All references to TypeScript files must be extensionless, and all extensionless imports must be TypeScript files.
 
-This probably doesn't work on Windows.
-
 ## License
 
 Copyright (c) 2018 Conduitry
