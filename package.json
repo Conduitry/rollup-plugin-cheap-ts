@@ -1,0 +1,14 @@
+{
+  "name": "rollup-plugin-cheap-ts",
+  "version": "0.0.0",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.js",
+  "devDependencies": {
+    "rollup": "*"
+  },
+  "scripts": {
+    "build": "rollup -c"
+  }
+}
