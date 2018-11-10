@@ -26,15 +26,12 @@ export default () => {
 		require('child_process').execSync(process.platform === 'win32' ? 'node_modules\\.bin\\tsc.cmd' : 'node_modules/.bin/tsc');
 		transform = async (code, id) => {
 			if (id.endsWith('.ts')) {
-				id = id.slice(0, -2) + 'js';
-				const [js, map] = await Promise.all(
-					[id, id + '.map'].map(async path => {
-						const data = await readFileAsync(path);
-						fs.unlink(path, () => {});
-						return data.toString();
-					}),
-				);
-				return { code: js, map: JSON.parse(map) };
+				const jsPromise = readFileAsync(id.slice(0, -2) + 'js').then(data => data.toString());
+				const mapPromise = readFileAsync(id.slice(0, -2) + 'js.map').then(data => JSON.parse(data.toString()), () => null);
+				const [code, map] = await Promise.all([jsPromise, mapPromise]);
+				fs.unlink(id.slice(0, -2) + 'js', () => null);
+				fs.unlink(id.slice(0, -2) + 'js.map', () => null);
+				return { code, map };
 			}
 		};
 	}
