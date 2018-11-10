@@ -14,7 +14,7 @@ export default () => {
 		};
 	} else {
 		const readFileAsync = require('util').promisify(fs.readFile);
-		require('child_process').execSync('node_modules/.bin/tsc');
+		require('child_process').execSync(process.platform === 'win32' ? 'node_modules\\.bin\\tsc.cmd' : 'node_modules/.bin/tsc');
 		transform = async (code, id) => {
 			if (id.endsWith('.ts')) {
 				id = id.slice(0, -2) + 'js';
