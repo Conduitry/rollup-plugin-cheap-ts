@@ -9,6 +9,10 @@
   "devDependencies": {
     "rollup": "*"
   },
+  "peerDependencies": {
+    "rollup": "*",
+    "typescript": "*"
+  },
   "scripts": {
     "build": "rollup -c"
   }
