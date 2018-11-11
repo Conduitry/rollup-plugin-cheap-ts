@@ -37,6 +37,7 @@ export default () => {
 
 	const path = require('path');
 	return {
+		name: 'cheap-ts',
 		resolveId(importee, importer) {
 			if (!path.extname(importee)) {
 				return this.resolveId(importee + '.ts', importer);
