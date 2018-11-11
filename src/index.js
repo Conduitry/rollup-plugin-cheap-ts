@@ -36,9 +36,11 @@ export default () => {
 		};
 	}
 
+	const path = require('path');
+
 	return {
 		resolveId(importee, importer) {
-			if (/\/[^.]+$/.test(importee)) {
+			if (!path.extname(importee)) {
 				return this.resolveId(importee + '.ts', importer);
 			}
 		},
