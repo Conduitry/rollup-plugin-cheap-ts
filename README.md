@@ -23,9 +23,7 @@ export default {
 };
 ```
 
-You must have a `tsconfig.json` in the same directory as your `rollup.config.js`. This file must specify an `"include": []` array, as this is used when calling the `tsc` binary so it knows which `.ts` files to compile.
-
-All extensionless imports must be TypeScript files.
+You must have a `tsconfig.json` in the same directory as your `rollup.config.js`. This must specify a `"compilerOptions"."target"` of at least `"ES6"`. There are a few other options that must not be specified. (The plugin will check for these.) All extensionless imports from `.ts` files must refer to `.ts` files.
 
 ## License
 
