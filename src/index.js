@@ -39,7 +39,7 @@ export default () => {
 	return {
 		name: 'cheap-ts',
 		resolveId(importee, importer) {
-			if (!path.extname(importee)) {
+			if ((!importer || importer.endsWith('.ts')) && !path.extname(importee)) {
 				return this.resolveId(importee + '.ts', importer);
 			}
 		},
