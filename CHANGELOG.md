@@ -1,3 +1,7 @@
+# v1.0.5
+
+- Display output of `tsc` command
+
 # v1.0.4
 
 - Better `tsconfig.json` validation
