@@ -1,12 +1,26 @@
 {
-  "name": "rollup-plugin-cheap-ts",
-  "version": "1.0.5",
-  "private": true,
-  "files": [
-    "index.js"
-  ],
-  "peerDependencies": {
-    "rollup": "*",
-    "typescript": "*"
-  }
+	"name": "rollup-plugin-cheap-ts",
+	"version": "1.0.5",
+	"private": true,
+	"description": "A small, hacky Rollup plugin for TypeScript",
+	"files": [
+		"index.js"
+	],
+	"engines": {
+		"node": ">=6"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/Conduitry/rollup-plugin-cheap-ts.git"
+	},
+	"author": "Conduitry",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/Conduitry/rollup-plugin-cheap-ts/issues"
+	},
+	"homepage": "https://conduitry.io/cheap-ts",
+	"peerDependencies": {
+		"rollup": "*",
+		"typescript": "*"
+	}
 }
