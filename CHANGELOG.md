@@ -1,3 +1,7 @@
+# v1.1.0
+
+- Support multiple simultaneous builds on the same set of input files
+
 # v1.0.5
 
 - Display output of `tsc` command
