@@ -1,10 +1,39 @@
 'use strict';
 
+const isWatch = process.env.ROLLUP_WATCH === 'true';
+
+const child_process = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const typescript = isWatch && require('typescript');
 
 let tsconfig;
 const files = new Set();
+const readFileAsync = (...args) => new Promise((res, rej) => fs.readFile(...args, (err, data) => (err ? rej(err) : res(data))));
+function resolveId(importee, importer) {
+	if ((!importer || importer.endsWith('.ts')) && !path.extname(importee)) {
+		return this.resolveId(importee + '.ts', importer);
+	}
+}
+const transform = isWatch
+	? (code, id) => {
+			if (id.endsWith('.ts')) {
+				const { outputText, sourceMapText } = typescript.transpileModule(code, tsconfig);
+				return { code: outputText, map: JSON.parse(sourceMapText) };
+			}
+	  }
+	: (code, id) => {
+			if (id.endsWith('.ts')) {
+				files.add(id.slice(0, -2) + 'js');
+				files.add(id.slice(0, -2) + 'js.map');
+				return Promise.all([readFileAsync(id.slice(0, -2) + 'js').then(data => data.toString()), readFileAsync(id.slice(0, -2) + 'js.map').then(data => JSON.parse(data.toString()), () => null)]).then(([code, map]) => ({ code, map }));
+			}
+	  };
+const unlinkQuiet = file => {
+	try {
+		fs.unlinkSync(file);
+	} catch (e) {}
+};
 
 module.exports = () => {
 	if (!tsconfig) {
@@ -13,52 +42,16 @@ module.exports = () => {
 		if (!compilerOptions || !compilerOptions.target || compilerOptions.target.toLowerCase() === 'es3' || compilerOptions.target.toLowerCase() === 'es5') {
 			throw new Error('tsconfig.json must specify "compilerOptions"."target" of at least "ES6"');
 		}
-		['inlineSourceMap', 'module', 'noEmit', 'outDir', 'outFile'].forEach(key => {
+		for (const key of ['inlineSourceMap', 'module', 'noEmit', 'outDir', 'outFile']) {
 			if (compilerOptions[key]) {
 				throw new Error(`tsconfig.json must not specify "compilerOptions"."${key}"`);
 			}
-		});
-		if (process.env.ROLLUP_WATCH !== 'true') {
-			require('child_process').execSync('tsc', { stdio: ['ignore', 'inherit', 'inherit'] });
-			const unlinkQuiet = file => {
-				try {
-					fs.unlinkSync(file);
-				} catch (e) {}
-			};
+		}
+		if (!isWatch) {
+			child_process.execSync('tsc', { stdio: ['ignore', 'inherit', 'inherit'] });
 			process.on('exit', () => files.forEach(unlinkQuiet));
 		}
 	}
 
-	let transform;
-	if (process.env.ROLLUP_WATCH === 'true') {
-		const { transpileModule } = require('typescript');
-		transform = (code, id) => {
-			if (id.endsWith('.ts')) {
-				const { outputText, sourceMapText } = transpileModule(code, tsconfig);
-				return { code: outputText, map: JSON.parse(sourceMapText) };
-			}
-		};
-	} else {
-		const readFileAsync = require('util').promisify(fs.readFile);
-		transform = async (code, id) => {
-			if (id.endsWith('.ts')) {
-				const jsPromise = readFileAsync(id.slice(0, -2) + 'js').then(data => data.toString());
-				const mapPromise = readFileAsync(id.slice(0, -2) + 'js.map').then(data => JSON.parse(data.toString()), () => null);
-				const [code, map] = await Promise.all([jsPromise, mapPromise]);
-				files.add(id.slice(0, -2) + 'js');
-				files.add(id.slice(0, -2) + 'js.map');
-				return { code, map };
-			}
-		};
-	}
-
-	return {
-		name: 'cheap-ts',
-		resolveId(importee, importer) {
-			if ((!importer || importer.endsWith('.ts')) && !path.extname(importee)) {
-				return this.resolveId(importee + '.ts', importer);
-			}
-		},
-		transform,
-	};
+	return { name: 'cheap-ts', resolveId, transform };
 };
