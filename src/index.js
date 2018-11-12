@@ -22,7 +22,7 @@ export default () => {
 		};
 	} else {
 		const readFileAsync = require('util').promisify(fs.readFile);
-		require('child_process').execSync('tsc');
+		require('child_process').execSync('tsc', { stdio: ['ignore', 'inherit', 'inherit'] });
 		transform = async (code, id) => {
 			if (id.endsWith('.ts')) {
 				const jsPromise = readFileAsync(id.slice(0, -2) + 'js').then(data => data.toString());
