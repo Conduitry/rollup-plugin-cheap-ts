@@ -1,4 +1,6 @@
-export default () => {
+'use strict';
+
+module.exports = () => {
 	const fs = require('fs');
 	const tsconfig = JSON.parse(fs.readFileSync('tsconfig.json').toString());
 	const { compilerOptions } = tsconfig;

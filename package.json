@@ -3,17 +3,10 @@
   "version": "1.0.5",
   "private": true,
   "files": [
-    "dist"
+    "index.js"
   ],
-  "main": "dist/index.js",
-  "devDependencies": {
-    "rollup": "*"
-  },
   "peerDependencies": {
     "rollup": "*",
     "typescript": "*"
-  },
-  "scripts": {
-    "build": "rollup -c"
   }
 }
