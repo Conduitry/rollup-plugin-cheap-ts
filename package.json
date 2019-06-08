@@ -18,7 +18,7 @@
 	"bugs": {
 		"url": "https://github.com/Conduitry/rollup-plugin-cheap-ts/issues"
 	},
-	"homepage": "https://conduitry.io/cheap-ts",
+	"homepage": "https://cndtr.dev/cheap-ts",
 	"peerDependencies": {
 		"rollup": "*",
 		"typescript": "*"

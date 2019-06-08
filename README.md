@@ -27,6 +27,4 @@ You must have a `tsconfig.json` in the same directory as your `rollup.config.js`
 
 ## License
 
-Copyright (c) 2018 Conduitry
-
-- [MIT](LICENSE)
+[MIT](LICENSE)
