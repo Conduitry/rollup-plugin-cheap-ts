@@ -1,3 +1,7 @@
+# v1.1.1
+
+- Fix `this.resolveId` deprecation warning in Rollup 2
+
 # v1.1.0
 
 - Support multiple simultaneous builds on the same set of input files
