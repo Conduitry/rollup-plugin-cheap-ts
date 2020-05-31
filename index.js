@@ -12,7 +12,7 @@ const files = new Set();
 const readFile_async = (...args) => new Promise((res, rej) => fs.readFile(...args, (err, data) => err ? rej(err) : res(data)));
 function resolveId(importee, importer) {
 	if ((!importer || importer.endsWith('.ts')) && !path.extname(importee)) {
-		return this.resolveId(importee + '.ts', importer);
+		return (this.resolve || this.resolveId)(importee + '.ts', importer);
 	}
 }
 const transform = is_watch
